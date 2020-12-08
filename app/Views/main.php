@@ -12,7 +12,6 @@
 <!-- HEADER: MENU + HEROE SECTION -->
 <?=view('templates/header')?>
 <section>
-    <h1>Tic Tac Toe</h1>
     <table class="tic-tac-toe">
         <tr>
             <td data-location="0"><a href="#" class="disabled cell cell-decoration"></a></td>
@@ -39,6 +38,6 @@
 <?=view('templates/footer')?>
 
 <script src="/js/jquery-3.5.1.min.js" defer></script>
-<script src="/js/scripts.js" defer></script>
+<script src="/js/init-frontend.js" defer></script>
 </body>
 </html>
