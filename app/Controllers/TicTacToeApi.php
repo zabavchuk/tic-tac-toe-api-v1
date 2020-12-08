@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use AbmmHasan\Uuid;
-use App\ThirdParty\TicTacToeAi;
 use CodeIgniter\API\ResponseTrait;
 
 class TicTacToeApi extends BaseController
