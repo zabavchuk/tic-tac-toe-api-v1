@@ -1,11 +1,11 @@
 'use strict';
 
-function getFullUrl(uri) {
-    return `${window.location.origin}/${(uri !== '' ? uri + '/' : '')}`;
-}
-
 if(localStorage.getItem('game_id') !== null){
     getGame(localStorage.getItem('game_id'));
+}
+
+function getFullUrl(uri) {
+    return `${window.location.origin}/${(uri !== '' ? uri + '/' : '')}`;
 }
 
 function getGame(game_id){

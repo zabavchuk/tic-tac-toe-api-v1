@@ -104,6 +104,7 @@ table {
 }
 .cell-decoration:hover {
     letter-spacing: 0.8em;
+    transition: all 0.2s cubic-bezier(.4,0,.2,1);
     background-image: linear-gradient(to right, #329246 0%, #329320 51%, #4dada5 100%);
 }
 
