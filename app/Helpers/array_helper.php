@@ -30,7 +30,7 @@ function search_value_array(array $array, $needle, $array_key)
 function search_index_array(array $array, $needle, $array_key)
 {
     foreach ($array as $index => $value){
-        if ($value[$array_key] === $needle){
+        if (isset($value[$array_key]) && $value[$array_key] === $needle){
             return $index;
         }
     }

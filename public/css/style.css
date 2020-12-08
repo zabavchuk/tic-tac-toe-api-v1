@@ -113,6 +113,10 @@ table {
     text-decoration: none;
 }
 
+.crossed{
+    background-image: linear-gradient(to bottom right,  transparent calc(50% - 1px), red, transparent calc(50% + 1px));
+}
+
 a {
     font: bold 14px Arial;
     height: 4em;

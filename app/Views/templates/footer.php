@@ -1,9 +1,7 @@
 <footer class="footer-distributed">
     <div class="environment">
 
-        <p>Page rendered in {elapsed_time} seconds</p>
-
-        <p>Environment: <?= ENVIRONMENT ?></p>
+        <p>Tic Tac Toe</p>
 
     </div>
 

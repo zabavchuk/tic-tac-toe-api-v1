@@ -1,8 +1,8 @@
 <?php namespace App\Controllers;
 
 use AbmmHasan\Uuid;
+use App\ThirdParty\GamesCache;
 use CodeIgniter\API\ResponseTrait;
-use CodeIgniter\HTTP\RequestInterface;
 
 class TicTacToeApi extends BaseController
 {
@@ -27,8 +27,9 @@ class TicTacToeApi extends BaseController
             'status' => $this->game_status[0]
         ];
 
-        // caching games data
-        cache_unshift($this->cache_name, $game, $this->cache_time);
+//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
+        $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
+        $games_cache->addGame($game, $this->cache_time);
 
         $this->respondCreated($game, 'Game successfully started');
 
@@ -41,54 +42,55 @@ class TicTacToeApi extends BaseController
     {
         $data = $this->request->getRawInput();
 
-        $games_cache = cache($this->cache_name);
+//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
+        $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
+        $game = $games_cache->getGame($game_id);
 
-        $game = search_value_array($games_cache, $game_id, 'id');
-        $index = search_index_array($games_cache, $game_id, 'id');
-
-        if (strlen($data['board']) === 9) {
-            $winner = check_winner($data['board']);
-
-            if($winner){
-                $game['status'] = $this->game_status[$winner];
-                $game['board'] = $data['board'];
-
-                $games_cache = array_replace($games_cache, [$index => $game]);
-            }
-            else{
-                $best_move = best_move($data['board']);
-
-                $game['board'] = $best_move;
-
-                $games_cache = array_replace($games_cache, [$index => $game]);
-
-                $winner = check_winner($game['board']);
+        if (!empty($game)){
+            if (strlen($data['board']) === 9) {
+                $winner = check_winner($data['board']);
 
                 if($winner){
                     $game['status'] = $this->game_status[$winner];
-
-                    $games_cache = array_replace($games_cache, [$index => $game]);
+                    $game['board'] = $data['board'];
                 }
-            }
-        } else {
-            return $this->fail(['reason' => 'Can\'t read board. Must be only nine characters.']);
-        }
+                else{
+                    $best_move = best_move($data['board']);
 
-        cache()->save($this->cache_name, $games_cache, $this->cache_time);
+                    $game['board'] = $best_move;
+
+                    $winner = check_winner($game['board']);
+
+                    if($winner){
+                        $game['status'] = $this->game_status[$winner];
+                    }
+                }
+            } else {
+                return $this->fail(['reason' => 'Can\'t read board. Must be only nine characters.']);
+            }
+        }
+        else{
+            return $this->fail('Bad request');
+        }
+        $games_cache->updateGame($game_id, $game);
 
         return json_encode($game);
     }
 
     public function get_all_games()
     {
-        $response = cache($this->cache_name) ?? cache($this->cache_name) ?? [];
+//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
+        $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
+        $response = $games_cache->getAllGames();
 
         return json_encode($response);
     }
 
     public function get_game($game_id)
     {
-        $response = search_value_array(cache($this->cache_name), $game_id, 'id');
+//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
+        $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
+        $response = $games_cache->getGame($game_id);
 
         return (!empty($response) ? json_encode($response) : $this->failNotFound('Resource not found'));
     }
@@ -96,17 +98,14 @@ class TicTacToeApi extends BaseController
     public function delete_game($game_id)
     {
 
-        $index = search_index_array(cache($this->cache_name), $game_id, 'id');
+//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
+        $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
+        $is_delete = $games_cache->deleteGame($game_id);
 
-        if (is_numeric($index)) {
-            $games_cache = cache($this->cache_name);
-
-            unset($games_cache[$index]);
-
-            cache()->save($this->cache_name, $games_cache, $this->cache_time);
-
+        if($is_delete){
             $response = $this->respondDeleted('', 'Game successfully deleted');
-        } else {
+        }
+        else{
             $response = $this->failNotFound('Resource not found');
         }
 

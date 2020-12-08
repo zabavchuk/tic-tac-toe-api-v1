@@ -26,7 +26,7 @@ class BaseController extends Controller
 	 *
 	 * @var array
 	 */
-	protected $helpers = ['cache_helper', 'array_helper', 'tic_tac_toe_helper'];
+	protected $helpers = ['array_helper', 'tic_tac_toe_helper'];
 
 	/**
 	 * Constructor.

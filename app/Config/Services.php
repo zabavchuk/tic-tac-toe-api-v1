@@ -1,5 +1,6 @@
 <?php namespace Config;
 
+use App\ThirdParty\GamesCache;
 use CodeIgniter\Config\Services as CoreServices;
 
 /**
@@ -18,13 +19,13 @@ use CodeIgniter\Config\Services as CoreServices;
 class Services extends CoreServices
 {
 
-	//    public static function example($getShared = true)
-	//    {
-	//        if ($getShared)
-	//        {
-	//            return static::getSharedInstance('example');
-	//        }
-	//
-	//        return new \CodeIgniter\Example();
-	//    }
+	    public static function gamesCacher(string $cache_name, int $cache_time,$getShared = true)
+	    {
+	        if ($getShared)
+	        {
+	            return static::getSharedInstance('gamesCacher', $cache_name, $cache_time);
+	        }
+
+	        return new GamesCache($cache_name, $cache_time);
+	    }
 }

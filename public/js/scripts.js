@@ -1,38 +1,37 @@
 'use strict';
 
-if(localStorage.getItem('game_id') !== null){
+if (localStorage.getItem('game_id') !== null) {
     getGame(localStorage.getItem('game_id'));
-}
-
-function getFullUrl(uri) {
-    return `${window.location.origin}/${(uri !== '' ? uri + '/' : '')}`;
-}
-
-function getGame(game_id){
-    $.get(
-        getFullUrl(`api/v1/games/${game_id}`),
-        {
-        },
-        drawGame,
-        'json'
-    );
 }
 
 function drawGame(response) {
     let board = response.board;
     let status = response.status;
 
-    if(status ==='RUNNING'){
+    if (status === 'RUNNING') {
         $('a.start-game').addClass('disabled');
         $('table').find('a').removeClass('disabled');
         $('table').find('a').addClass('cell-decoration');
 
         for (let i = 0; i < board.length; i++) {
-            if(board[i] !=='-'){
+            if (board[i] !== '-') {
                 $('table.tic-tac-toe').find(`[data-location='${i}']`).text(board[i]);
             }
         }
     }
+}
+
+function getFullUrl(uri) {
+    return `${window.location.origin}/${(uri !== '' ? uri + '/' : '')}`;
+}
+
+function getGame(game_id) {
+    $.get(
+        getFullUrl(`api/v1/games/${game_id}`),
+        {},
+        drawGame,
+        'json'
+    );
 }
 
 function initiateGame(response) {
@@ -46,49 +45,45 @@ function initiateGame(response) {
 }
 
 function handleResponse(response) {
-    if(response.location !== ''){
+    if (response.location !== '') {
         $.get(
             response.location,
-            {
-            },
+            {},
             initiateGame,
             'json'
         );
     }
 }
 
-function startGame(e){
+function startGame(e) {
     e.preventDefault();
 
     $.post(
         getFullUrl('api/v1/games'),
-        {
-        },
+        {},
         handleResponse,
         'json'
     );
 }
 
-function creatBoard(index) {
-    let board = '';
-    if($(this).text() === ''){
-        board += '-';
-    }
-    else {
-        board += $(this).text();
-    }
-}
-
 function redrawBoard(response) {
 
     for (let i = 0; i < response.board.length; i++) {
-        if(response.board[i] !=='-'){
+        if (response.board[i] !== '-') {
             $('table.tic-tac-toe').find(`[data-location='${i}']`).text(response.board[i]);
         }
     }
 
-    if(response.status !== 'RUNNING'){
-        alert(response.status);
+    if (response.status !== 'RUNNING') {
+        if (response.status === "X_WON") {
+            alert("X won the game");
+        }
+        else if (response.status === "O_WON") {
+            alert("O won the game");
+        }
+        else {
+            alert("Oops, no one won");
+        }
         $('a.start-game').removeClass('disabled');
 
     }
@@ -105,9 +100,9 @@ function makeMove(e) {
 
     $(this).closest('td').text('X');
     $('table.tic-tac-toe').find('a').addClass('disabled');
-    $cells.each(function(){
+    $cells.each(function () {
 
-        if($(this).text() === ''){
+        if ($(this).text() === '') {
             board += '-';
         }
         else {
@@ -118,7 +113,7 @@ function makeMove(e) {
     $.ajax({
         url: getFullUrl(`api/v1/games/${localStorage.getItem('game_id')}`),
         type: 'PUT',
-        data: {'board' : board},
+        data: {'board': board},
         contentType: "application/json; charset=UTF-8",
         dataType: "json",
         success: redrawBoard
@@ -128,8 +123,6 @@ function makeMove(e) {
 $(function () {
 
     $(document).on('click', '.start-game', startGame);
-
-    // $('.cell').on('click', makeMove);
-    $(document).on('click', '.cell' , makeMove);
+    $(document).on('click', '.cell', makeMove);
 
 });
