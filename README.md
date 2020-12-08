@@ -1,5 +1,11 @@
 # Tic Tac Toe API v1.0.1
 
+This is the very first version of Tic Tac Toe API. 
+<br>
+The player can only plays with the computer.
+So far, the computer moves to the first free cell.
+The next version will implement the Minimax algorithm.
+
 API logic is in `/app/Controllers/TicTacToeApi.php` file.
 <br>
 Routing: `/app/Config/Routes.php`.

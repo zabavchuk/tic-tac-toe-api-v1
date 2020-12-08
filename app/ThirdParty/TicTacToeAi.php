@@ -57,6 +57,16 @@ class TicTacToeAi
         return $board;
     }
 
+    public function checkBoard(string $board)
+    {
+        $check = true;
+
+        if (preg_replace('/(X)|(O)|(-)/', '', $board) !== '') {
+            $check = false;
+        }
+        return $check;
+    }
+
     protected function checkWinner($board)
     {
         $winner = false;

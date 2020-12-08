@@ -44,10 +44,15 @@ class TicTacToeApi extends BaseController
         $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
         $game = $games_cache->getGame($game_id);
 
-        if (!empty($game)) {
+        if (!empty($game) && $game['status'] === $this->basic_status) {
             if (strlen($data['board']) === 9) {
                 $tic_tac_toe = service('ticTacToe', $data['board']);
-                $game = $tic_tac_toe->makeMove($game);
+
+                if ($tic_tac_toe->checkBoard($data['board'])) {
+                    $game = $tic_tac_toe->makeMove($game);
+                } else {
+                    return $this->fail(['reason' => 'Can\'t read board. Incorrect symbol(s).']);
+                }
             } else {
                 return $this->fail(['reason' => 'Can\'t read board. Must be only nine characters.']);
             }
