@@ -12,12 +12,12 @@ Front-end part in `/public/js/init-frontend.js`
 
 ## Setup
 
-Copy `env` to `.env` you need to change some default values.
+Copy `env` to `.env` if you need to change some default values.
 <p>
 Use command <b>composer install</b> to install all dependencies.
 </p>
 <p>
-Use command: <b>php spark serve</b> to run the project.
+Use command <b>php spark serve</b> to run the project.
 </p>
 
 ## Server Requirements
