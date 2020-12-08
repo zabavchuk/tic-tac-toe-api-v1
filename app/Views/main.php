@@ -14,26 +14,26 @@
 <?=view('templates/header')?>
 <section>
     <h1>Tic Tac Toe</h1>
-    <table>
+    <table class="tic-tac-toe">
         <tr>
-            <td><a href="#" data-location="1"></a>1</td>
-            <td class="vert"><a href="#" data-location="2"></a>2</td>
-            <td><a href="#" data-location="3"></a>3</td>
+            <td data-location="0"><a href="#" class="disabled cell cell-decoration"></a></td>
+            <td data-location="1" class="vert"><a href="#" class="disabled cell cell-decoration"></a></td>
+            <td data-location="2"><a href="#" class="disabled cell cell-decoration"></a></td>
         </tr>
         <tr>
-            <td class="hori"><a href="#" data-location="4"></a>4</td>
-            <td class="vert hori"><a href="#" data-location="5"></a>5</td>
-            <td class="hori"><a href="#" data-location="6"></a>6</td>
+            <td data-location="3" class="hori"><a href="#" class="disabled cell cell-decoration"></a></td>
+            <td data-location="4" class="vert hori"><a href="#" class="disabled cell cell-decoration"></a></td>
+            <td data-location="5" class="hori"><a href="#" class="disabled cell cell-decoration"></a></td>
         </tr>
         <tr>
-            <td><a href="#" data-location="7"></a>7</td>
-            <td class="vert"><a href="#" data-location="8"></a>8</td>
-            <td><a href="#" data-location="9"></a>9</td>
+            <td data-location="6"><a href="#" class="disabled cell cell-decoration"></a></td>
+            <td data-location="7" class="vert"><a href="#" class="disabled cell cell-decoration"></a></td>
+            <td data-location="8"><a href="#" class="disabled cell cell-decoration"></a></td>
         </tr>
     </table>
 
 
-    <a href="#" class="button hello start-game">Start game</a>
+    <a href="#" class="button decoration start-game">Start game</a>
 </section>
 <!-- FOOTER: DEBUG INFO + COPYRIGHTS -->
 

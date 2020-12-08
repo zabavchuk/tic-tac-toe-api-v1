@@ -98,13 +98,16 @@ table {
     border-bottom: 2px solid black;
 }
 
-
-.hello:hover {
+.decoration:hover {
     letter-spacing: 0.8em;
     background-image: linear-gradient(to right, #506d92 0%, #589392 51%, #5e81ad 100%);
 }
+.cell-decoration:hover {
+    letter-spacing: 0.8em;
+    background-image: linear-gradient(to right, #329246 0%, #329320 51%, #4dada5 100%);
+}
 
-.hello {
+.decoration {
     color: white;
     text-decoration: none;
 }
@@ -124,4 +127,9 @@ a {
     transition: all 0.2s cubic-bezier(.4,0,.2,1);
     text-decoration: none;
 
+}
+
+a.disabled {
+    pointer-events: none;
+    background-color: rgba(1, 1, 1, 0.3);
 }

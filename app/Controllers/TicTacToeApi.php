@@ -62,11 +62,10 @@ class TicTacToeApi extends BaseController
 
                 $games_cache = array_replace($games_cache, [$index => $game]);
 
-                $winner = check_winner($data['board']);
+                $winner = check_winner($game['board']);
 
                 if($winner){
                     $game['status'] = $this->game_status[$winner];
-                    $game['board'] = $data['board'];
 
                     $games_cache = array_replace($games_cache, [$index => $game]);
                 }
