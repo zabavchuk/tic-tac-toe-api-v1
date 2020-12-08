@@ -1,6 +1,7 @@
 <?php namespace Config;
 
 use App\ThirdParty\GamesCache;
+use App\ThirdParty\TicTacToeAi;
 use CodeIgniter\Config\Services as CoreServices;
 
 /**
@@ -27,5 +28,15 @@ class Services extends CoreServices
 	        }
 
 	        return new GamesCache($cache_name, $cache_time);
+	    }
+
+	    public static function ticTacToe(string $board,$getShared = true)
+	    {
+	        if ($getShared)
+	        {
+	            return static::getSharedInstance('ticTacToe', $board);
+	        }
+
+	        return new TicTacToeAi($board);
 	    }
 }

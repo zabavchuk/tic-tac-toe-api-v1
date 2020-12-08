@@ -63,7 +63,8 @@ class GamesCache
         }
     }
 
-    public function deleteGame(string $game_id){
+    public function deleteGame(string $game_id)
+    {
 
         $all_games = $this->getAllGames();
         $game = $this->getGame($game_id);
@@ -77,12 +78,10 @@ class GamesCache
                 cache()->save($this->cache_name, $all_games, $this->cache_time);
 
                 $is_delete = true;
-            }
-            else {
+            } else {
                 $is_delete = false;
             }
-        }
-        else {
+        } else {
             $is_delete = false;
         }
 

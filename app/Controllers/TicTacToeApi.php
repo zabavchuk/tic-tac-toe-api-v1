@@ -1,13 +1,13 @@
 <?php namespace App\Controllers;
 
 use AbmmHasan\Uuid;
-use App\ThirdParty\GamesCache;
+use App\ThirdParty\TicTacToeAi;
 use CodeIgniter\API\ResponseTrait;
 
 class TicTacToeApi extends BaseController
 {
     use ResponseTrait;
-    private $game_status = ['RUNNING', 'X_WON', 'O_WON', 'DRAW'];
+    private $basic_status = 'RUNNING';
     private $cache_name = 'all_games';
     private $cache_time = 86400;
 
@@ -24,10 +24,9 @@ class TicTacToeApi extends BaseController
         $game = [
             'id' => $game_id,
             'board' => '---------',
-            'status' => $this->game_status[0]
+            'status' => $this->basic_status
         ];
 
-//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
         $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
         $games_cache->addGame($game, $this->cache_time);
 
@@ -42,34 +41,17 @@ class TicTacToeApi extends BaseController
     {
         $data = $this->request->getRawInput();
 
-//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
         $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
         $game = $games_cache->getGame($game_id);
 
-        if (!empty($game)){
+        if (!empty($game)) {
             if (strlen($data['board']) === 9) {
-                $winner = check_winner($data['board']);
-
-                if($winner){
-                    $game['status'] = $this->game_status[$winner];
-                    $game['board'] = $data['board'];
-                }
-                else{
-                    $best_move = best_move($data['board']);
-
-                    $game['board'] = $best_move;
-
-                    $winner = check_winner($game['board']);
-
-                    if($winner){
-                        $game['status'] = $this->game_status[$winner];
-                    }
-                }
+                $tic_tac_toe = service('ticTacToe', $data['board']);
+                $game = $tic_tac_toe->makeMove($game);
             } else {
                 return $this->fail(['reason' => 'Can\'t read board. Must be only nine characters.']);
             }
-        }
-        else{
+        } else {
             return $this->fail('Bad request');
         }
         $games_cache->updateGame($game_id, $game);
@@ -79,7 +61,6 @@ class TicTacToeApi extends BaseController
 
     public function get_all_games()
     {
-//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
         $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
         $response = $games_cache->getAllGames();
 
@@ -88,7 +69,6 @@ class TicTacToeApi extends BaseController
 
     public function get_game($game_id)
     {
-//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
         $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
         $response = $games_cache->getGame($game_id);
 
@@ -97,15 +77,12 @@ class TicTacToeApi extends BaseController
 
     public function delete_game($game_id)
     {
-
-//        $games_cache = new GamesCache($this->cache_name, $this->cache_time);
         $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
         $is_delete = $games_cache->deleteGame($game_id);
 
-        if($is_delete){
+        if ($is_delete) {
             $response = $this->respondDeleted('', 'Game successfully deleted');
-        }
-        else{
+        } else {
             $response = $this->failNotFound('Resource not found');
         }
 
