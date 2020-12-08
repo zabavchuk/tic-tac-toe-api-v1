@@ -1,6 +1,7 @@
 # Tic Tac Toe API v1.0.1
 
-This is the very first version of Tic Tac Toe API. 
+This is the very first version of Tic Tac Toe API 
+based on PHP Framework Codeigniter 4.0.4.
 <br>
 The player can only plays with the computer.
 So far, the computer moves to the first free cell.
