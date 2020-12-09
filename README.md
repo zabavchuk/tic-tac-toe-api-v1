@@ -1,11 +1,12 @@
-# Tic Tac Toe API v1.0.1
+# Tic Tac Toe API v1.1.1
 
-This is the very first version of Tic Tac Toe API 
+Tic Tac Toe API 
 based on PHP Framework Codeigniter 4.0.4.
 <br>
-The player can only plays with the computer.
-So far, the computer moves to the first free cell.
-The next version will implement the Minimax algorithm.
+The player can only play with the computer.
+>Version 1.1.1 updated the computer algorithm.
+<br>
+The cell is searched according to the Minimax algorithm.
 
 API logic is in `/app/Controllers/TicTacToeApi.php` file.
 <br>

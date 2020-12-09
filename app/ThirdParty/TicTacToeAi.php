@@ -6,6 +6,10 @@ namespace App\ThirdParty;
 class TicTacToeAi
 {
     private $game_status = ['RUNNING', 'X_WON', 'O_WON', 'DRAW'];
+    private $scores = [0, -10, 10, 0];
+
+    private $ai_mark = 'O';
+    private $human_mark = 'X';
 
     private $board;
 
@@ -14,50 +18,80 @@ class TicTacToeAi
         $this->board = $board;
     }
 
-    public function makeMove(array $game)
+    public function makeMove(array $game): array
     {
         $winner = $this->checkWinner($this->board);
 
-        if ($winner) {
+        if ($winner > 0) {
             $game['status'] = $this->game_status[$winner];
             $game['board'] = $this->board;
         } else {
-            $best_move = $this->bestMove($this->board);
+            $best_move = $this->getBestMove($this->board);
 
             $game['board'] = $best_move;
 
             $winner = $this->checkWinner($game['board']);
 
-            if ($winner) {
+            if ($winner > 0) {
                 $game['status'] = $this->game_status[$winner];
             }
         }
-
         return $game;
     }
 
-    protected function bestMove(string $board)
+    protected function getBestMove(string $board): string
     {
         $best_score = -INF;
-        $mark = 'O';
-
+        $move = 0;
         for ($i = 0; $i < strlen($board); $i++) {
             if ($board[$i] === '-') {
-                $board[$i] = $mark;
-//            $score = minimax($board, 0, false);
-                $score = 1;
+                $board[$i] = $this->ai_mark;
+                $score = $this->minimax($board, 0, false);
                 $board[$i] = '-';
                 if ($score > $best_score) {
                     $best_score = $score;
-                    $board[$i] = $mark;
+                    $move = $i;
                 }
             }
         }
-
+        $board[$move] = $this->ai_mark;
         return $board;
     }
 
-    public function checkBoard(string $board)
+    protected function minimax(string $board, int $depth, bool $is_maximizing)
+    {
+        $result = $this->checkWinner($board);
+
+        if ($result > 0) {
+            return $this->scores[$result];
+        }
+
+        if ($is_maximizing) {
+            $best_score = -INF;
+            for ($i = 0; $i < strlen($board); $i++) {
+                if ($board[$i] === '-') {
+                    $board[$i] = $this->ai_mark;
+                    $score = $this->minimax($board, $depth + 1, false);
+                    $board[$i] = '-';
+                    $best_score = max($score, $best_score);
+                }
+            }
+            return $best_score;
+        } else {
+            $best_score = INF;
+            for ($i = 0; $i < strlen($board); $i++) {
+                if ($board[$i] === '-') {
+                    $board[$i] = $this->human_mark;
+                    $score = $this->minimax($board, $depth + 1, true);
+                    $board[$i] = '-';
+                    $best_score = min($score, $best_score);
+                }
+            }
+            return $best_score;
+        }
+    }
+
+    public function checkBoard(string $board): bool
     {
         $check = true;
 
@@ -67,9 +101,9 @@ class TicTacToeAi
         return $check;
     }
 
-    protected function checkWinner($board)
+    protected function checkWinner($board): int
     {
-        $winner = false;
+        $winner = 0;
         $open_spots = 0;
 
         //horizontal
@@ -110,10 +144,10 @@ class TicTacToeAi
             }
         }
 
-        if ($winner === false && $open_spots === 0) {
+        if ($winner === 0 && $open_spots === 0) {
             return 3;
-        } elseif ($winner !== false) {
-            return ($winner === 'X' ? 1 : 2);
+        } elseif ($winner !== 0) {
+            return ($winner === $this->human_mark ? 1 : 2);
         } else {
             return $winner;
         }

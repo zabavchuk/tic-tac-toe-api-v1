@@ -13,13 +13,8 @@ class GamesCache
         $this->cache_time = $cache_time;
     }
 
-    /**
-     * @param array $value
-     * @param int $cache_time
-     */
     public function addGame(array $value, int $cache_time)
     {
-
         if (cache($this->cache_name) === null) {
             $values[] = $value;
             cache()->save($this->cache_name, $values, $cache_time);
@@ -30,12 +25,12 @@ class GamesCache
         }
     }
 
-    public function getAllGames()
+    public function getAllGames(): array
     {
         return cache($this->cache_name) ?? cache($this->cache_name) ?? [];
     }
 
-    public function getGame(string $game_id)
+    public function getGame(string $game_id): array
     {
         $game = [];
         $all_games = $this->getAllGames();
@@ -47,7 +42,6 @@ class GamesCache
                 $game = $all_games[$index];
             }
         }
-
         return $game;
     }
 
@@ -63,9 +57,8 @@ class GamesCache
         }
     }
 
-    public function deleteGame(string $game_id)
+    public function deleteGame(string $game_id): bool
     {
-
         $all_games = $this->getAllGames();
         $game = $this->getGame($game_id);
 
@@ -84,7 +77,6 @@ class GamesCache
         } else {
             $is_delete = false;
         }
-
         return $is_delete;
     }
 }

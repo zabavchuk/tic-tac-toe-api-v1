@@ -6,7 +6,9 @@ use CodeIgniter\API\ResponseTrait;
 class TicTacToeApi extends BaseController
 {
     use ResponseTrait;
-    private $basic_status = 'RUNNING';
+
+    private $start_status = 'RUNNING';
+    private $start_board = '---------';
     private $cache_name = 'all_games';
     private $cache_time = 86400;
 
@@ -22,8 +24,8 @@ class TicTacToeApi extends BaseController
 
         $game = [
             'id' => $game_id,
-            'board' => '---------',
-            'status' => $this->basic_status
+            'board' => $this->start_board,
+            'status' => $this->start_status
         ];
 
         $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
@@ -43,7 +45,7 @@ class TicTacToeApi extends BaseController
         $games_cache = service('gamesCacher', $this->cache_name, $this->cache_time);
         $game = $games_cache->getGame($game_id);
 
-        if (!empty($game) && $game['status'] === $this->basic_status) {
+        if (!empty($game) && $game['status'] === $this->start_status) {
             if (strlen($data['board']) === 9) {
                 $tic_tac_toe = service('ticTacToe', $data['board']);
 
