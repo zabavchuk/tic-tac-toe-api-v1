@@ -6,7 +6,7 @@ based on PHP Framework Codeigniter 4.0.4.
 The player can only play with the computer.
 >Version 1.1.1 updated the computer algorithm.
 <br>
-The cell is searched according to the Minimax algorithm.
+>The cell is searched according to the Minimax algorithm.
 
 API logic is in `/app/Controllers/TicTacToeApi.php` file.
 <br>
